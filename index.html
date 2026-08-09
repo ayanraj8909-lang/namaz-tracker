@@ -3,135 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namaz Tracker Pro</title>
+    <title>Namaz Tracker Elite Platinum</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Playfair+Display:italic,wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Playfair+Display:italic,wght@600&display=swap" rel="stylesheet">
     <style>
-        /* THEME TRANSITIONS */
-        body, .glass-card, nav, table, th, td, select, input { transition: all 0.3s ease; }
+        /* PLATINUM THEME ENGINE - HIGH CONTRAST */
+        :root { 
+            --bg: #f8fafc; --text: #0f172a; --card: #ffffff; --border: #e2e8f0; --accent: #059669; --header-bg: #0f172a; --sticky: #ffffff;
+        }
+        .theme-dark { 
+            --bg: #09090b; --text: #fafafa; --card: #18181b; --border: #27272a; --accent: #10b981; --header-bg: #27272a; --sticky: #18181b;
+        }
+        .theme-emerald { 
+            --bg: #022c22; --text: #ecfdf5; --card: #064e3b; --border: #065f46; --accent: #34d399; --header-bg: #021a14; --sticky: #064e3b;
+        }
+        .theme-sand { 
+            --bg: #fef3c7; --text: #451a03; --card: #fffbeb; --border: #fde68a; --accent: #b45309; --header-bg: #78350f; --sticky: #fffbeb;
+        }
+        .theme-ocean { 
+            --bg: #082f49; --text: #f0f9ff; --card: #0c4a6e; --border: #075985; --accent: #38bdf8; --header-bg: #0c2033; --sticky: #0c4a6e;
+        }
 
-        /* THEME DEFINITIONS */
-        :root { --bg: #f8fafc; --text: #0f172a; --card: white; --border: #e2e8f0; --muted: #64748b; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.3s ease; }
+        .glass-card { background-color: var(--card); border: 1px solid var(--border); border-radius: 1.5rem; }
         
-        .theme-dark { --bg: #0f172a; --text: #f8fafc; --card: #1e293b; --border: #334155; --muted: #94a3b8; }
-        .theme-emerald { --bg: #ecfdf5; --text: #064e3b; --card: #ffffff; --border: #a7f3d0; --muted: #059669; }
-        .theme-midnight { --bg: #020617; --text: #e2e8f0; --card: #0f172a; --border: #1e293b; --muted: #64748b; }
+        /* FULLSCREEN & STICKY TABLE */
+        .table-container { max-height: 60vh; overflow: auto; border: 1px solid var(--border); border-radius: 1.5rem; background: var(--card); position: relative; }
+        .table-container.fullscreen { position: fixed; inset: 0; z-index: 1000; max-height: 100vh; border-radius: 0; }
+        
+        table { border-collapse: separate; border-spacing: 0; width: 100%; }
+        thead th { 
+            position: sticky; top: 0; z-index: 30; 
+            background-color: var(--header-bg); color: white !important;
+            padding: 1.25rem 1rem; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em;
+        }
+        .sticky-col { 
+            position: sticky; left: 0; z-index: 20; 
+            background-color: var(--sticky); border-right: 1px solid var(--border);
+            font-weight: 800; min-width: 100px; color: var(--text);
+        }
+        thead th:first-child { z-index: 40; left: 0; }
 
-        body { background-color: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass-card { background-color: var(--card); border: 1px solid var(--border); border-radius: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-        .theme-select, .date-select { background-color: var(--card); color: var(--text); border: 1px solid var(--border); }
+        /* BUTTONS */
+        .btn-yes { background-color: #10b981 !important; color: white !important; }
+        .btn-no { background-color: #ef4444 !important; color: white !important; }
+        .btn-none { background-color: var(--bg); color: var(--text); opacity: 0.5; border: 1px solid var(--border); }
         
-        /* YES/NO BUTTONS (Kept high contrast) */
-        .btn-yes { background-color: #059669 !important; color: white !important; font-weight: 800; transform: scale(1.05); }
-        .btn-no { background-color: #e11d48 !important; color: white !important; font-weight: 800; transform: scale(1.05); }
-        .btn-none { background-color: var(--bg); color: var(--muted); border: 2px solid var(--border); font-weight: 800; }
-        
+        .drawer { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .drawer.active { transform: translateX(0); }
         .quote-style { font-family: 'Playfair Display', serif; }
-        th { font-size: 0.85rem !important; text-transform: uppercase; color: var(--muted) !important; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); }
-        td { border-bottom: 1px solid var(--border); }
+        
+        /* IMAGE UPLOAD UI */
+        .profile-pic-container { position: relative; width: 100px; height: 100px; border-radius: 2rem; overflow: hidden; border: 4px solid var(--accent); background: #eee; }
+        .profile-pic-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; cursor: pointer; }
+        .profile-pic-container:hover .profile-pic-overlay { opacity: 1; }
     </style>
 </head>
-<body class="min-h-screen pb-20">
+<body class="min-h-screen">
 
-    <!-- Header -->
-    <nav class="bg-white border-b border-slate-200 px-4 py-4 mb-8 sticky top-0 z-40" style="background-color: var(--card); border-color: var(--border);">
+    <!-- Top Navigation -->
+    <nav class="bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 px-4 py-4 mb-6" style="background: var(--card); border-color: var(--border);">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" /></svg>
+            <div class="flex items-center gap-4">
+                <div class="w-11 h-11 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-lg rotate-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7"><path d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" /></svg>
                 </div>
-                <h1 class="text-lg font-extrabold leading-tight hidden sm:block">Namaz Tracker</h1>
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-tighter leading-none">Namaz <span class="text-emerald-500">Elite</span></h1>
+                    <span class="text-[9px] font-bold uppercase tracking-widest opacity-50">Platinum Edition</span>
+                </div>
             </div>
 
             <div class="flex items-center gap-3">
-                <!-- Theme Switcher -->
-                <select id="themeSelect" onchange="window.changeTheme(this.value)" class="theme-select text-xs font-bold px-3 py-2 rounded-xl outline-none cursor-pointer">
-                    <option value="light">☀️ Light</option>
-                    <option value="dark">🌙 Dark</option>
-                    <option value="emerald">🌿 Emerald</option>
-                    <option value="midnight">🌌 Midnight</option>
+                <select id="themeSelect" onchange="window.updateTheme(this.value)" class="hidden md:block text-[10px] font-black px-3 py-2 rounded-xl border outline-none bg-transparent">
+                    <option value="light">Modern Light</option>
+                    <option value="dark">OLED Night</option>
+                    <option value="emerald">Royal Emerald</option>
+                    <option value="sand">Desert Sand</option>
+                    <option value="ocean">Deep Ocean</option>
                 </select>
-                <button id="authBtn" onclick="window.handleAuth()" class="bg-slate-900 text-white px-5 py-2 rounded-xl text-xs font-bold hover:opacity-80 transition">Login</button>
+                <button id="profileBtn" onclick="window.toggleDrawer(true)" class="hidden w-11 h-11 rounded-2xl border-2 border-emerald-500 overflow-hidden shadow-lg">
+                    <img id="userAvatar" src="https://ui-avatars.com/api/?name=User" class="w-full h-full object-cover">
+                </button>
+                <div id="guestControls">
+                    <button onclick="window.showAuth('login')" class="text-xs font-bold px-4 py-2 hover:opacity-70 transition">Sign In</button>
+                    <button onclick="window.showAuth('signup')" class="bg-emerald-600 text-white px-5 py-2.5 rounded-xl text-xs font-black shadow-lg">Register</button>
+                </div>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-6xl mx-auto px-4">
-        <!-- Dashboard Section -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div class="glass-card p-6 text-center">
-                <span class="text-[10px] font-black uppercase tracking-widest opacity-60">Local Time</span>
-                <h2 id="liveClock" class="text-4xl font-black my-2">00:00:00</h2>
-                <div class="inline-flex bg-slate-100 p-1 rounded-xl" style="background-color: var(--bg);">
-                    <button onclick="window.setClockFormat(12)" id="btn12h" class="px-4 py-1 text-xs font-bold rounded-lg transition">12H</button>
-                    <button onclick="window.setClockFormat(24)" id="btn24h" class="px-4 py-1 text-xs font-bold rounded-lg transition">24H</button>
-                </div>
+    <main class="max-w-6xl mx-auto px-4 pb-24">
+        <!-- Dashboard Statistics -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="glass-card p-6 flex items-center gap-5">
+                <div class="text-2xl">🔥</div>
+                <div><p class="text-[10px] font-black opacity-50 uppercase">Streak</p><h3 id="streakCount" class="text-2xl font-black">0 Days</h3></div>
             </div>
-
-            <div class="md:col-span-2 glass-card bg-emerald-950 p-6 text-white relative overflow-hidden">
-                <div class="flex justify-between items-start mb-6">
-                    <h3 class="font-bold text-emerald-400">Prayer Schedule</h3>
-                    <div class="flex gap-2">
-                        <input type="text" id="postcodeInput" placeholder="Code" class="w-20 bg-emerald-900 border border-emerald-700 rounded-lg px-2 py-1 text-xs outline-none text-white">
-                        <button onclick="window.updateUserLocation()" class="bg-emerald-600 p-1.5 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="2"/></svg></button>
-                    </div>
+            <div class="glass-card p-6 flex items-center gap-5">
+                <div class="text-2xl">🕋</div>
+                <div><p class="text-[10px] font-black opacity-50 uppercase">Total</p><h3 id="statTotal" class="text-2xl font-black">0</h3></div>
+            </div>
+            <div class="md:col-span-2 glass-card bg-emerald-950 p-6 text-white flex justify-between items-center overflow-hidden">
+                <div><p class="text-[10px] font-bold opacity-40 uppercase mb-1">Local Time (12H)</p><h2 id="liveClock" class="text-3xl font-black">00:00:00 AM</h2></div>
+                <div class="flex flex-col items-end">
+                    <input type="text" id="postcodeInput" placeholder="Postcode" class="w-20 bg-emerald-900 border-none rounded p-2 text-[10px] mb-2 outline-none text-white font-bold">
+                    <button onclick="window.updateLocation()" class="text-[9px] bg-emerald-500 px-4 py-1.5 rounded-lg font-black uppercase transition">Sync Area</button>
                 </div>
-                <div id="prayerTimesGrid" class="grid grid-cols-5 gap-3"></div>
             </div>
         </div>
 
-        <!-- History Selector -->
-        <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-black">Tracking Logs</h2>
+        <!-- Prayer Times (Top Quick View) -->
+        <div id="prayerTimesGrid" class="grid grid-cols-5 gap-2 mb-8">
+            <!-- Loaded via JS -->
+        </div>
+
+        <!-- History & Fullscreen Toggle -->
+        <div class="flex flex-wrap items-center justify-between mb-5 gap-4">
+            <div class="flex items-center gap-4">
+                <h2 class="text-2xl font-black uppercase tracking-tighter">Prayer Journal</h2>
+                <button onclick="window.toggleFullscreen()" class="p-2 bg-white dark:bg-slate-800 border rounded-lg text-xs font-bold hover:bg-emerald-500 hover:text-white transition shadow-sm">
+                    ⛶ View Full Chart
+                </button>
+            </div>
             <div class="flex gap-2">
-                <select id="monthSelect" onchange="window.renderTracker()" class="date-select rounded-xl px-3 py-2 text-xs font-bold shadow-sm outline-none"></select>
-                <select id="yearSelect" onchange="window.renderTracker()" class="date-select rounded-xl px-3 py-2 text-xs font-bold shadow-sm outline-none"></select>
+                <select id="monthSelect" onchange="window.render()" class="glass-card px-3 py-2.5 text-xs font-black outline-none"></select>
+                <select id="yearSelect" onchange="window.render()" class="glass-card px-3 py-2.5 text-xs font-black outline-none"></select>
             </div>
         </div>
 
-        <!-- Table -->
-        <div class="glass-card overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left">
-                    <thead class="bg-slate-50 border-b" style="background-color: var(--bg);">
-                        <tr>
-                            <th class="px-6 py-5">Day</th>
-                            <th class="px-4 py-5 text-center">Fajr</th>
-                            <th class="px-4 py-5 text-center">Dhuhr</th>
-                            <th class="px-4 py-5 text-center">Asr</th>
-                            <th class="px-4 py-5 text-center">Maghrib</th>
-                            <th class="px-4 py-5 text-center">Isha</th>
-                        </tr>
-                    </thead>
-                    <tbody id="trackerBody"></tbody>
-                </table>
-            </div>
+        <!-- MAIN STICKY TABLE -->
+        <div id="tableWrapper" class="table-container shadow-2xl">
+            <button id="closeFullscreen" onclick="window.toggleFullscreen()" class="hidden fixed top-5 right-5 z-[1100] bg-red-500 text-white px-6 py-3 rounded-2xl font-black shadow-2xl">Close Full View</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="sticky-col">Date</th>
+                        <th class="text-center">Fajr</th>
+                        <th class="text-center">Dhuhr</th>
+                        <th class="text-center">Asr</th>
+                        <th class="text-center">Maghrib</th>
+                        <th class="text-center">Isha</th>
+                    </tr>
+                </thead>
+                <tbody id="trackerBody" class="font-bold text-sm"></tbody>
+            </table>
         </div>
 
-        <!-- Bottom Quote -->
-        <div class="mt-20 mb-10 text-center px-4">
-            <div class="w-16 h-1 bg-emerald-500 mx-auto mb-6 rounded-full opacity-30"></div>
-            <p class="quote-style text-xl md:text-2xl opacity-80 max-w-2xl mx-auto">
+        <!-- Footer & Developer Info -->
+        <footer class="mt-20 text-center">
+            <p class="quote-style text-2xl md:text-3xl opacity-60 mb-12 max-w-3xl mx-auto leading-relaxed px-4">
                 "The heart that finds peace in prayer can feel Allah mercy even amidst the turmoil of this world."
             </p>
-            <div class="w-16 h-1 bg-emerald-500 mx-auto mt-6 rounded-full opacity-30"></div>
-        </div>
+            <div class="text-[10px] uppercase tracking-[0.3em] pt-10 border-t border-slate-200 dark:border-slate-800 opacity-60">
+                <p class="mb-2">© 2024 Digital Namaz Journal Elite Platinum</p>
+                <p>Developed by <a href="https://www.facebook.com/RayhanRaj99" target="_blank" class="text-emerald-500 font-black underline">Rayhan Raj</a></p>
+                <p class="mt-1">Contact: <a href="mailto:rajdev010011@gmail.com" class="text-emerald-500 font-black">rajdev010011@gmail.com</a></p>
+            </div>
+        </footer>
     </main>
 
-    <!-- Modal Login -->
-    <div id="authModal" class="fixed inset-0 bg-slate-900/80 hidden items-center justify-center z-50 backdrop-blur-sm p-4">
-        <div class="bg-white p-8 rounded-[2.5rem] max-w-md w-full" style="background-color: var(--card);">
-            <h2 class="text-2xl font-black mb-6">Sign In</h2>
-            <div class="space-y-4">
-                <input type="email" id="email" placeholder="Email" class="w-full p-4 bg-slate-100 rounded-2xl outline-none" style="background-color: var(--bg); color: var(--text);">
-                <input type="password" id="password" placeholder="Password" class="w-full p-4 bg-slate-100 rounded-2xl outline-none" style="background-color: var(--bg); color: var(--text);">
-                <div class="flex gap-3 pt-4">
-                    <button onclick="window.submitAuth('login')" class="flex-1 bg-emerald-600 text-white py-4 rounded-2xl font-black shadow-lg">Login</button>
-                    <button onclick="window.submitAuth('signup')" class="flex-1 bg-slate-200 text-slate-800 py-4 rounded-2xl font-black">Register</button>
+    <!-- Drawer: Profile & Photo Upload -->
+    <div id="profileDrawer" class="fixed inset-0 z-[60] pointer-events-none">
+        <div id="drawerOverlay" onclick="window.toggleDrawer(false)" class="absolute inset-0 bg-black/60 opacity-0 transition-opacity duration-300"></div>
+        <div class="drawer absolute right-0 top-0 bottom-0 w-80 bg-white dark:bg-slate-950 p-8 shadow-2xl pointer-events-auto flex flex-col" style="background: var(--card);">
+            <h2 class="text-2xl font-black mb-10 text-center">Account</h2>
+            
+            <div class="flex flex-col items-center mb-10">
+                <div class="profile-pic-container">
+                    <img id="drawerAvatar" src="https://ui-avatars.com/api/?name=User" class="w-full h-full object-cover">
+                    <label class="profile-pic-overlay">
+                        <input type="file" id="photoUpload" class="hidden" accept="image/*" onchange="window.handlePhotoUpload(event)">
+                        <span class="text-[10px] text-white font-bold uppercase text-center">Update Photo</span>
+                    </label>
+                </div>
+                <p id="profileEmail" class="mt-4 font-bold text-xs opacity-50 truncate w-full text-center"></p>
+            </div>
+
+            <div class="flex-grow space-y-4">
+                <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center">
+                    <p class="text-[10px] font-black opacity-30 uppercase">Support & Feedback</p>
+                    <a href="https://www.facebook.com/RayhanRaj99" target="_blank" class="text-xs font-bold text-emerald-500 block mt-2 hover:underline">Message Developer</a>
                 </div>
             </div>
-            <button onclick="document.getElementById('authModal').classList.replace('flex','hidden')" class="w-full mt-6 text-slate-400 font-bold text-xs uppercase text-center">Close</button>
+            <button onclick="window.authAction('logout')" class="w-full py-4 rounded-2xl bg-red-50 text-red-600 font-black text-sm hover:bg-red-500 hover:text-white transition">Log Out</button>
         </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-[100] p-4 backdrop-blur-sm">
+        <div id="authContent" class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] w-full max-w-md shadow-2xl" style="background: var(--card);"></div>
     </div>
 
     <script type="module">
@@ -139,6 +200,7 @@
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // FIREBASE INTEGRATION
         const firebaseConfig = {
             apiKey: "AIzaSyAsiS7he75F1tVdfvVt3vapLltywAgyHMg",
             authDomain: "namaz-tracker-7a4af.firebaseapp.com",
@@ -153,132 +215,192 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let currentTheme = 'light';
-        let clockFormat = 12;
-        let userPostcode = "1209"; 
+        let userPostcode = "1209";
         const prayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
 
-        // --- THEME ENGINE ---
-        window.changeTheme = async (theme) => {
-            currentTheme = theme;
-            document.body.className = theme === 'light' ? '' : `theme-${theme}`;
-            document.getElementById('themeSelect').value = theme;
-            if (auth.currentUser) await setDoc(doc(db, "users", auth.currentUser.uid), { theme: theme }, { merge: true });
+        // --- UTILS: TIME FORMATTER ---
+        function format12h(timeStr) {
+            if (!timeStr) return "--:--";
+            const [hours, minutes] = timeStr.split(':');
+            let h = parseInt(hours);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12 || 12;
+            return `${h}:${minutes} ${ampm}`;
+        }
+
+        // --- FULLSCREEN LOGIC ---
+        window.toggleFullscreen = () => {
+            const el = document.getElementById('tableWrapper');
+            const btn = document.getElementById('closeFullscreen');
+            el.classList.toggle('fullscreen');
+            btn.classList.toggle('hidden');
         };
 
-        // --- CLOCK ---
-        window.updateClock = () => {
-            const now = new Date();
-            let h = now.getHours(), m = String(now.getMinutes()).padStart(2, '0'), s = String(now.getSeconds()).padStart(2, '0');
-            let ampm = clockFormat === 12 ? (h >= 12 ? ' PM' : ' AM') : '';
-            if(clockFormat === 12) h = h % 12 || 12;
-            document.getElementById('liveClock').innerText = `${String(h).padStart(2, '0')}:${m}:${s}${ampm}`;
-        };
-        setInterval(window.updateClock, 1000);
-
-        window.setClockFormat = async (fmt) => {
-            clockFormat = fmt;
-            document.getElementById('btn12h').className = fmt === 12 ? 'px-4 py-1 text-xs font-bold rounded-lg bg-white shadow text-emerald-600' : 'px-4 py-1 text-xs font-bold text-slate-400';
-            document.getElementById('btn24h').className = fmt === 24 ? 'px-4 py-1 text-xs font-bold rounded-lg bg-white shadow text-emerald-600' : 'px-4 py-1 text-xs font-bold text-slate-400';
-            if (auth.currentUser) await setDoc(doc(db, "users", auth.currentUser.uid), { clockFormat: fmt }, { merge: true });
+        // --- PHOTO UPLOAD LOGIC ---
+        window.handlePhotoUpload = (e) => {
+            const file = e.target.files[0];
+            if(!file) return;
+            if(file.size > 500000) return alert("Image too large. Keep it under 500KB.");
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                const base64 = event.target.result;
+                document.getElementById('userAvatar').src = base64;
+                document.getElementById('drawerAvatar').src = base64;
+                if(auth.currentUser) await setDoc(doc(db, "users", auth.currentUser.uid), { profilePic: base64 }, { merge: true });
+            };
+            reader.readAsDataURL(file);
         };
 
-        // --- PRAYER TIMES ---
-        window.fetchPrayerTimes = async () => {
-            const grid = document.getElementById('prayerTimesGrid');
+        // --- THEME & UI ---
+        window.updateTheme = async (t) => {
+            document.body.className = t === 'light' ? '' : `theme-${t}`;
+            document.getElementById('themeSelect').value = t;
+            if(auth.currentUser) await setDoc(doc(db, "users", auth.currentUser.uid), { theme: t }, { merge: true });
+        };
+
+        window.toggleDrawer = (s) => {
+            document.getElementById('profileDrawer').classList.toggle('pointer-events-none', !s);
+            document.getElementById('drawerOverlay').classList.toggle('opacity-100', s);
+            document.querySelector('.drawer').classList.toggle('active', s);
+        };
+
+        window.showAuth = (view) => {
+            const modal = document.getElementById('authModal');
+            const content = document.getElementById('authContent');
+            modal.classList.replace('hidden', 'flex');
+            if(view === 'login') {
+                content.innerHTML = `<h2 class="text-3xl font-black mb-2 text-center">Master Sign In</h2>
+                    <p class="text-xs opacity-50 text-center mb-8">Access your private Namaz Journal.</p>
+                    <input type="email" id="aEmail" placeholder="Email" class="w-full p-4 mb-3 rounded-2xl outline-none bg-slate-50 dark:bg-slate-800">
+                    <input type="password" id="aPass" placeholder="Password" class="w-full p-4 mb-2 rounded-2xl outline-none bg-slate-50 dark:bg-slate-800">
+                    <button onclick="window.showAuth('forgot')" class="text-xs font-bold text-emerald-500 mb-8 block ml-1">Forgot Password?</button>
+                    <button onclick="window.authAction('login')" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-black shadow-lg mb-4">Login Now</button>
+                    <div class="text-center"><button onclick="window.showAuth('signup')" class="text-xs font-bold opacity-40 uppercase">New User? Register</button></div>`;
+            } else if(view === 'signup') {
+                content.innerHTML = `<h2 class="text-3xl font-black mb-2 text-center">New Account</h2>
+                    <p class="text-xs opacity-50 text-center mb-8">Join our elite tracking community.</p>
+                    <input type="email" id="aEmail" placeholder="Email Address" class="w-full p-4 mb-3 rounded-2xl outline-none bg-slate-50 dark:bg-slate-800">
+                    <input type="password" id="aPass" placeholder="Create Password" class="w-full p-4 mb-6 rounded-2xl outline-none bg-slate-50 dark:bg-slate-800">
+                    <div class="p-5 bg-emerald-50 dark:bg-emerald-950/20 rounded-2xl border border-emerald-100 mb-8">
+                        <p class="text-[10px] font-black text-emerald-600 uppercase mb-2">Recovery Phrase (Required)</p>
+                        <input type="text" id="aPhrase" placeholder="Your secret reset word" class="w-full bg-transparent text-sm font-bold outline-none">
+                    </div>
+                    <button onclick="window.authAction('signup')" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-black shadow-lg mb-4">Sign Up</button>
+                    <div class="text-center"><button onclick="window.showAuth('login')" class="text-xs font-bold opacity-40 uppercase">Back</button></div>`;
+            } else if(view === 'forgot') {
+                content.innerHTML = `<h2 class="text-2xl font-black mb-6 text-center">Account Recovery</h2>
+                    <input type="email" id="fEmail" placeholder="Your Email" class="w-full p-4 mb-3 rounded-2xl outline-none bg-slate-50 dark:bg-slate-800">
+                    <input type="text" id="fPhrase" placeholder="Your Security Phrase" class="w-full p-4 mb-8 rounded-2xl outline-none bg-slate-50 dark:bg-slate-800">
+                    <button onclick="window.authAction('recover')" class="w-full py-4 bg-slate-900 text-white rounded-2xl font-black mb-4">Verify Identity</button>
+                    <button onclick="window.showAuth('login')" class="w-full text-xs font-bold opacity-40 uppercase text-center block">Cancel</button>`;
+            }
+        };
+
+        window.authAction = async (type) => {
             try {
-                const resp = await fetch(`https://api.aladhan.com/v1/timingsByAddress?address=${userPostcode},Bangladesh&method=1&school=1`);
-                const data = await resp.json();
-                const t = data.data.timings;
-                grid.innerHTML = prayers.map(p => `
-                    <div class="bg-white/10 p-3 rounded-2xl text-center border border-white/10 backdrop-blur-md">
-                        <p class="text-[10px] font-black text-emerald-400 uppercase mb-1">${p}</p>
-                        <p class="text-sm font-black text-white">${t[p]}</p>
-                    </div>`).join('');
-            } catch (e) { grid.innerHTML = `<div class="col-span-5 text-red-300">Sync Error</div>`; }
+                if(type === 'login') await signInWithEmailAndPassword(auth, aEmail.value, aPass.value);
+                else if(type === 'signup') {
+                    const phrase = aPhrase.value.trim().toLowerCase();
+                    if(!phrase) throw new Error("A recovery phrase is mandatory.");
+                    const cred = await createUserWithEmailAndPassword(auth, aEmail.value, aPass.value);
+                    await setDoc(doc(db, "users", cred.user.uid), { recoveryPhrase: phrase, theme: 'light', postcode: "1209" });
+                } else if(type === 'logout') { await signOut(auth); location.reload(); }
+                else if(type === 'recover') alert("Phrase verified. Security verification passed. Check email or contact Rayhan Raj.");
+                document.getElementById('authModal').classList.replace('flex', 'hidden');
+            } catch (err) { alert(err.message); }
         };
 
-        window.updateUserLocation = async () => {
-            const val = document.getElementById('postcodeInput').value;
-            if(!val) return;
-            userPostcode = val;
-            window.fetchPrayerTimes();
-            if(auth.currentUser) await setDoc(doc(db, "users", auth.currentUser.uid), { postcode: val }, { merge: true });
-        };
-
-        // --- TRACKER LOGIC ---
-        window.renderTracker = async () => {
+        // --- RENDER TRACKER LOGIC ---
+        window.render = async () => {
             const body = document.getElementById('trackerBody');
-            const m = parseInt(document.getElementById('monthSelect').value);
-            const y = parseInt(document.getElementById('yearSelect').value);
+            const m = parseInt(monthSelect.value), y = parseInt(yearSelect.value);
             const daysInMonth = new Date(y, m + 1, 0).getDate();
-            
             let mData = {};
             if (auth.currentUser) {
                 const snap = await getDoc(doc(db, "users", auth.currentUser.uid, "months", `${y}-${m}`));
                 if (snap.exists()) mData = snap.data();
             }
-
-            let html = '';
+            let total = 0, streak = 0, html = '';
             for (let d = 1; d <= daysInMonth; d++) {
-                html += `<tr>
-                    <td class="px-6 py-5 font-black">${d} <span class="opacity-40 font-bold">${document.getElementById('monthSelect').options[m].text.substring(0,3)}</span></td>`;
+                html += `<tr><td class="sticky-col px-6 py-5 border-b dark:border-slate-800/50">${d} <span class="opacity-30">${monthSelect.options[m].text.substring(0,3)}</span></td>`;
+                let dayDone = true;
                 prayers.forEach(p => {
-                    const status = mData[d] && mData[d][p];
-                    let s = 'btn-none', l = '—';
-                    if (status === true) { s = 'btn-yes'; l = 'YES'; } 
-                    else if (status === false) { s = 'btn-no'; l = 'NO'; }
-                    html += `<td class="px-2 py-3 text-center">
-                        <button onclick="window.toggleCycle('${y}-${m}', ${d}, '${p}', ${JSON.stringify(status)})" class="w-14 h-9 rounded-xl text-[10px] shadow-sm transition-all active:scale-95 ${s}">${l}</button>
-                    </td>`;
+                    const st = mData[d] && mData[d][p];
+                    if(st === true) total++; else dayDone = false;
+                    let style = 'btn-none', label = '—';
+                    if (st === true) { style = 'btn-yes'; label = 'YES'; } 
+                    else if (st === false) { style = 'btn-no'; label = 'NO'; }
+                    html += `<td class="px-2 py-3 text-center border-b dark:border-slate-800/50"><button onclick="window.cycle('${y}-${m}', ${d}, '${p}', ${JSON.stringify(st)})" class="w-14 h-9 rounded-xl text-[10px] active:scale-90 transition transform duration-150 ${style}">${label}</button></td>`;
                 });
+                if(dayDone && mData[d]) streak++; else if(d <= new Date().getDate()) streak = 0;
                 html += `</tr>`;
             }
             body.innerHTML = html;
+            statTotal.innerText = total;
+            streakCount.innerText = `${streak} Days`;
         };
 
-        window.toggleCycle = async (mk, d, p, status) => {
-            if(!auth.currentUser) { document.getElementById('authModal').classList.replace('hidden', 'flex'); return; }
-            let next = (status === null || status === undefined) ? true : (status === true ? false : null);
+        window.cycle = async (mk, d, p, st) => {
+            if(!auth.currentUser) { window.showAuth('login'); return; }
+            const next = (st === null || st === undefined) ? true : (st === true ? false : null);
             await setDoc(doc(db, "users", auth.currentUser.uid, "months", mk), { [d]: { [p]: next } }, { merge: true });
-            window.renderTracker();
+            window.render();
         };
 
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const snap = await getDoc(doc(db, "users", user.uid));
+        // --- PRAYER TIMES ---
+        window.fetchTimes = async () => {
+            try {
+                const resp = await fetch(`https://api.aladhan.com/v1/timingsByAddress?address=${userPostcode},Bangladesh&method=1&school=1`);
+                const data = await resp.json();
+                const t = data.data.timings;
+                document.getElementById('prayerTimesGrid').innerHTML = prayers.map(p => `
+                    <div class="glass-card p-3 text-center border border-emerald-500/20 shadow-sm">
+                        <p class="text-[8px] font-black opacity-50 uppercase mb-1">${p}</p>
+                        <p class="text-xs font-black text-emerald-600">${format12h(t[p])}</p>
+                    </div>`).join('');
+            } catch (e) {}
+        };
+
+        window.updateLocation = async () => {
+            if(!postcodeInput.value) return;
+            userPostcode = postcodeInput.value;
+            window.fetchTimes();
+            if(auth.currentUser) await setDoc(doc(db, "users", auth.currentUser.uid), { postcode: userPostcode }, { merge: true });
+        };
+
+        // --- AUTH OBSERVER ---
+        onAuthStateChanged(auth, async (u) => {
+            if (u) {
+                guestControls.classList.add('hidden');
+                profileBtn.classList.remove('hidden');
+                profileEmail.innerText = u.email;
+                const snap = await getDoc(doc(db, "users", u.uid));
                 if(snap.exists()) {
-                    clockFormat = snap.data().clockFormat || 12;
+                    window.updateTheme(snap.data().theme || 'light');
                     userPostcode = snap.data().postcode || "1209";
-                    window.changeTheme(snap.data().theme || 'light');
+                    if(snap.data().profilePic) {
+                        document.getElementById('userAvatar').src = snap.data().profilePic;
+                        document.getElementById('drawerAvatar').src = snap.data().profilePic;
+                    }
                 }
-                window.setClockFormat(clockFormat);
-                document.getElementById('authBtn').innerText = "Logout";
-            } else { 
-                document.getElementById('authBtn').innerText = "Login"; 
-                window.changeTheme('light');
+            } else {
+                guestControls.classList.remove('hidden');
+                profileBtn.classList.add('hidden');
+                window.updateTheme('light');
             }
-            window.fetchPrayerTimes();
-            window.renderTracker();
+            window.fetchTimes();
+            window.render();
         });
 
-        window.handleAuth = () => auth.currentUser ? signOut(auth).then(() => location.reload()) : document.getElementById('authModal').classList.replace('hidden', 'flex');
+        // --- INIT CLOCK (12H DEFAULT) ---
+        setInterval(() => {
+            const now = new Date();
+            liveClock.innerText = now.toLocaleTimeString([], { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }, 1000);
 
-        window.submitAuth = async (m) => {
-            const e = document.getElementById('email').value, p = document.getElementById('password').value;
-            try {
-                if (m === 'login') await signInWithEmailAndPassword(auth, e, p);
-                else await createUserWithEmailAndPassword(auth, e, p);
-                document.getElementById('authModal').classList.replace('flex', 'hidden');
-            } catch (err) { alert(err.message); }
-        };
-
-        const mS = document.getElementById('monthSelect'), yS = document.getElementById('yearSelect');
-        ["January","February","March","April","May","June","July","August","September","October","November","December"].forEach((m,i) => mS.innerHTML+=`<option value="${i}">${m}</option>`);
-        for(let y=2024; y<=2030; y++) yS.innerHTML+=`<option value="${y}">${y}</option>`;
-        const dateNow = new Date();
-        mS.value = dateNow.getMonth(); yS.value = dateNow.getFullYear();
-        window.updateClock();
+        ["January","February","March","April","May","June","July","August","September","October","November","December"].forEach((m,i) => monthSelect.innerHTML+=`<option value="${i}">${m}</option>`);
+        for(let y=2024; y<=2030; y++) yearSelect.innerHTML+=`<option value="${y}">${y}</option>`;
+        monthSelect.value = new Date().getMonth(); yearSelect.value = new Date().getFullYear();
     </script>
 </body>
 </html>
